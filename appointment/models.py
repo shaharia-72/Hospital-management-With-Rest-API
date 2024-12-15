@@ -23,4 +23,7 @@ class Appointment(models.Model):
     cancel = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"Doctor: {self.doctor.user.first_name} {self.patient.user.first_name}"
+        doctor_name = getattr(self.doctor.user, 'first_name', 'Unknown')
+        patient_name = getattr(self.patient.user, 'first_name', 'Unknown')
+        return f"Doctor: {doctor_name}, Patient: {patient_name}"
+
