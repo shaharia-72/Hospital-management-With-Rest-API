@@ -28,9 +28,9 @@ class AvailableTime(models.Model):
 class Doctor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to="doctor/images/") 
-    designation = models.ManyToManyField(Designation)
+    designation = models.ForeignKey(Designation,on_delete=models.CASCADE)
     specialization = models.ManyToManyField(Specialization)
-    availableTime = models.ForeignKey(AvailableTime, on_delete=models.CASCADE)
+    availableTime = models.ManyToManyField(AvailableTime)
     fee = models.DecimalField(max_digits=10, decimal_places=2)
     meet_link = models.CharField(max_length=100)
 
