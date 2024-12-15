@@ -4,7 +4,7 @@ from .import views
 
 router = DefaultRouter()
 
-router.register('', views.ContactUsView)
+router.register('', views.ServiceView)
 
 
 urlpatterns = [
