@@ -9,4 +9,5 @@ router.register('List', views.PatientView)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('register/', views.UserRegistrationView.as_view(), name='register'),
 ]
