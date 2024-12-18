@@ -30,6 +30,10 @@ SECRET_KEY = 'django-insecure-gou=*baa-4f-!b%(l1!ny-te&g7$c)0-3xqd!5t$sn!m@)%9(^
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
+CSRF_TRUSTED_ORIGINS = [
+    'https://*,mydomain.com',
+    'https://*.127.0.0.1',
+]
 
 
 # Application definition
@@ -150,4 +154,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = env("EMAIL")
 EMAIL_HOST_PASSWORD = env("EMAIL_PASSWORD")  # Your App Password
 DEFAULT_FROM_EMAIL = 'noreplay@gmail'
+
+
+
 
