@@ -16,3 +16,4 @@ certifi
 sqlparse
 Markdown
 pytz
+Pillow
