@@ -33,7 +33,9 @@ ALLOWED_HOSTS = ["*"]
 CSRF_TRUSTED_ORIGINS = [
     'https://*,mydomain.com',
     'https://*.127.0.0.1',
+    'https://hospital-management-with-rest-api.onrender.com',
 ]
+
 
 
 # Application definition
