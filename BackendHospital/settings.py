@@ -36,6 +36,16 @@ CSRF_TRUSTED_ORIGINS = [
     'https://hospital-management-with-rest-api.onrender.com',
 ]
 
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:5500",
+    "http://localhost:5500",
+    # Add other origins if necessary
+]
+
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    "https://.*\.yourdomain\.com$",
+]
+
 
 
 # Application definition
@@ -54,6 +64,7 @@ INSTALLED_APPS = [
     'appointment',
     'service',
     'rest_framework.authtoken',
+    'corsheaders',
 
 ]
 
@@ -65,9 +76,17 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
-
+CORS_ALLOW_ALL_ORIGINS = True
 ROOT_URLCONF = 'BackendHospital.urls'
+CORS_ALLOW_HEADERS = [
+    'content-type',
+    'authorization',
+    'x-csrftoken',
+    # Add other headers if needed
+]
 
 TEMPLATES = [
     {
