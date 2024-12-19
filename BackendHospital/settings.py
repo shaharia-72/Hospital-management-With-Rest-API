@@ -72,13 +72,25 @@ CORS_ALLOW_HEADERS = [
     'x-csrftoken',
 ]
 
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    'r"^https://\w+\.example\.com$"',  # Regex pattern for allowed subdomains
+]
+
 CSRF_TRUSTED_ORIGINS = [
-    "*",
-    'https://*,mydomain.com',
+    'https://*:*.com',
     'https://*.127.0.0.1',
+    'http://*.127.0.0.1',
     'https://hospital-management-with-rest-api.onrender.com',
+    "https://127.0.0.1:5500",
     "http://127.0.0.1:5500",
-    "http://localhost:5500",
+    "https://localhost:5500",
+    "https://localhost:3000",
+    "https://127.0.0.1:3000",
+    "http://127.0.0.1:3000",
+    'https://127.0.0.1:8000',
+    'http://127.0.0.1:8000',
+    'https://localhost:8000'
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
