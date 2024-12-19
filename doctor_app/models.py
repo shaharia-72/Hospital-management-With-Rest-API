@@ -28,6 +28,7 @@ class AvailableTime(models.Model):
 class Doctor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to="doctor_app/images/") 
+    descriptions = models.TextField(null=True)
     designation = models.ForeignKey(Designation,on_delete=models.CASCADE)
     specialization = models.ManyToManyField(Specialization)
     availableTime = models.ManyToManyField(AvailableTime)
