@@ -46,3 +46,8 @@ Markdown
 pytz
 Pillow
 django-cors-headers
+django-cors-headers
+Django
+djangorestframework
+gunicorn
+psycopg2-binary
