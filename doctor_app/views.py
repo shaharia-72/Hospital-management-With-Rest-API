@@ -39,7 +39,14 @@ class DoctorView(viewsets.ModelViewSet):
     search_fields = ['user__first_name', 'user__email', 'designation__name','specialization__name']
 
 class DoctorReviewView(viewsets.ModelViewSet):
-    queryset = models.Review.objects.all()
+    # queryset = models.Review.objects.all()
     serializer_class = serializers.DoctorReviewSerializer
+    def get_queryset(self):
+
+        queryset = models.Review.objects.all()  
+        doctor_id = self.request.query_params.get('doctor_id', None)  
+        if doctor_id is not None:
+            queryset = queryset.filter(doctor_id=doctor_id) 
+        return queryset
     
 
