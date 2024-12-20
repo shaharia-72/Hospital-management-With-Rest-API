@@ -36,7 +36,7 @@ class DoctorSerializer(serializers.ModelSerializer):
         return None
 
 class DoctorReviewSerializer(serializers.ModelSerializer):
-    # user  = serializers.StringRelatedField(many=False)
+    user  = serializers.StringRelatedField(many=False)
     class Meta:
         model = models.Review
         fields = '__all__'

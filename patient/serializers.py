@@ -8,6 +8,11 @@ class PatientSerializer(serializers.ModelSerializer):
         model = models.Patient
         fields = '__all__'
 
+    def get_full_name(self, obj):
+        if obj.user:
+            return f"{obj.user.first_name} {obj.user.last_name}"
+        return None
+
 class RegistrationSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(required=True)
     class Meta:
