@@ -37,6 +37,12 @@ class DoctorSerializer(serializers.ModelSerializer):
 
 class DoctorReviewSerializer(serializers.ModelSerializer):
     user  = serializers.StringRelatedField(many=False)
+    reviewer_full_name = serializers.SerializerMethodField()
     class Meta:
         model = models.Review
         fields = '__all__'
+
+    def get_reviewer_full_name(self, obj):
+        if obj.reviewer and obj.reviewer.user:
+            return f"{obj.reviewer.user.first_name} {obj.reviewer.user.last_name}"
+        return None
