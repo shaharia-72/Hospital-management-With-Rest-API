@@ -34,6 +34,7 @@ class UserRegistrationView(APIView):
         if serializer.is_valid():
             # Save the user
             user = serializer.save()
+            patient = models.Patient.objects.get(user=user)
             
             # Generate token and UID for activation link
             token = default_token_generator.make_token(user)
@@ -52,7 +53,10 @@ class UserRegistrationView(APIView):
             email.send()
 
             return Response(
-                {'message': 'User registered successfully! A confirmation email has been sent.'},
+                {'message': 'User registered successfully! A confirmation email has been sent.',
+                'user_id': user.id,
+                'patient_id': patient.id
+                },
                 status=status.HTTP_201_CREATED
             )
         
@@ -86,12 +90,14 @@ class UserLoginView(APIView):
 
             if user:
                 token,_ = Token.objects.get_or_create(user=user)
-                print(token)
-                print(_)
+                patient = models.Patient.objects.get(user=user)
+                # print(token)
+                # print(_)
                 login(request, user)
                 return Response({
                     'token': token.key,
-                    'user_id': user.id
+                    'user_id': user.id,
+                    'patient_id': patient.id
                 }, status=status.HTTP_200_OK)
             else:
                 return Response({

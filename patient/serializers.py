@@ -10,12 +10,20 @@ class PatientSerializer(serializers.ModelSerializer):
 
 class RegistrationSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(required=True)
+    phone_no = serializers.CharField(required=True, max_length=12,allow_blank=True)
+    image = serializers.ImageField(required=True,allow_null=True)
+    # class Meta:
+    #     model = User
+    #     fields = ['username', 'first_name', 'last_name','email','password','confirm_password']
+    #     extra_kwargs = {
+    #         'password': {'write_only': True}
+    #     }
     class Meta:
-        model = User
-        fields = ['username', 'first_name', 'last_name','email','password','confirm_password']
-        extra_kwargs = {
-            'password': {'write_only': True}
-        }
+            model = User
+            fields = ['username', 'first_name', 'last_name','email','password','confirm_password', 'phone_no', 'image']
+            extra_kwargs = {
+                'password': {'write_only': True}
+            }
 
     def validate(self, data):
         if data['password'] != data['confirm_password']:
@@ -35,6 +43,13 @@ class RegistrationSerializer(serializers.ModelSerializer):
         user.set_password(self.validated_data['password'])
         user.is_active = False
         user.save()
+
+        patient = models.Patient(
+            user=user,
+            phone_no=self.validated_data['phone_no'],
+            image=self.validated_data['image']
+        )
+        patient.save()
         return user
     
 class UserLoginSerializer(serializers.Serializer):
