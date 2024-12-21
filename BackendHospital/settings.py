@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'service',
     'rest_framework.authtoken',
     'corsheaders',
+     'users',
 
 ]
 
