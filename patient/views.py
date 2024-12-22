@@ -34,7 +34,13 @@ class UserRegistrationView(APIView):
         if serializer.is_valid():
             # Save the user
             user = serializer.save()
-            patient = models.Patient.objects.get(user=user)
+            # patient = models.Patient.objects.get(user=user)
+
+            patient = models.Patient.objects.create(
+                user=user,
+                phone_no=serializer.validated_data['phone_no'],
+                image=serializer.validated_data['image']
+            )
             
             # Generate token and UID for activation link
             token = default_token_generator.make_token(user)
@@ -45,12 +51,18 @@ class UserRegistrationView(APIView):
             email_subject = 'Activate Your Account'
             try:
                 email_body = render_to_string('confirm_link.html', {'confirm_link': confirm_link})
-            except TemplateDoesNotExist:
-                 print("Template 'confirm_link.html' does not exist.")
+            # except TemplateDoesNotExist:
+            #      print("Template 'confirm_link.html' does not exist.")
 
-            email = EmailMultiAlternatives(email_subject,'', to=[user.email])
-            email.attach_alternative(email_body,"text/html")
-            email.send()
+                email = EmailMultiAlternatives(email_subject,'', to=[user.email])
+                email.attach_alternative(email_body,"text/html")
+                email.send()
+            except Exception as e:
+                user.delete()  # Rollback user creation
+                return Response(
+                    {'error': "Failed to send activation email. Please try again later."},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
 
             return Response(
                 {'message': 'User registered successfully! A confirmation email has been sent.',
@@ -67,13 +79,13 @@ def activate(request,uid64, token):
     try:
         uid = urlsafe_base64_decode(uid64).decode()
         user = User._default_manager.get(pk = uid)
-    except(User.DoesNotExist):
+    except (User.DoesNotExist, ValueError, TypeError):
         user = None
     
     if user is not None and default_token_generator.check_token(user, token):
         user.is_active = True
         user.save()
-        return redirect('login')
+        return redirect('login.html')
     else:
         return redirect('register')
 
