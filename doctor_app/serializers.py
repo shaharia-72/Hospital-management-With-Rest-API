@@ -34,7 +34,7 @@ class DoctorSerializer(serializers.ModelSerializer):
 
 class DoctorReviewSerializer(serializers.ModelSerializer):
     reviewer_full_name = serializers.SerializerMethodField()
-    doctor_full_name = serializers.SerializerMethodField()
+    doctor_full_name = serializers.SerializerMethodField()  # New field
 
     class Meta:
         model = models.Review
@@ -47,5 +47,19 @@ class DoctorReviewSerializer(serializers.ModelSerializer):
 
     def get_doctor_full_name(self, obj):
         if obj.doctor and obj.doctor.user:
-            return f"Dr. {obj.doctor.user.first_name} {obj.doctor.user.last_name}"
+            return f"{obj.doctor.user.first_name} {obj.doctor.user.last_name}"
         return None
+
+    def to_representation(self, instance):
+        # Get the base representation from the parent class
+        representation = super().to_representation(instance)
+
+        # Ensure the rating is displayed as a string
+        rating = instance.rating
+        if isinstance(rating, str):
+            representation['rating'] = rating
+        else:
+            # If for some reason it's an integer, handle accordingly
+            representation['rating'] = str(rating)
+
+        return representation

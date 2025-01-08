@@ -41,13 +41,23 @@ class Doctor(models.Model):
     def __str__(self):
         return f"Dr. {self.user.first_name} {self.user.last_name}"
 
+
+
+
+STAR_CHOICES = [
+    ('★', '★'),
+    ('★★', '★★'),
+    ('★★★', '★★★'),
+    ('★★★★', '★★★★'),
+    ('★★★★★', '★★★★★'),
+]
+
 class Review(models.Model):
     reviewer = models.ForeignKey(Patient, on_delete=models.CASCADE)
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     body = models.TextField()
     create_time = models.DateTimeField(auto_now_add=True)
-    rating = models.IntegerField(default=0)
+    rating = models.CharField(choices=STAR_CHOICES, max_length=20)
 
     def __str__(self):
         return f"Review by {self.reviewer.user.first_name} for Dr. {self.doctor.user.first_name}"
-
