@@ -278,29 +278,80 @@ def activate(request, uid64, token):
 
 
 ### Login View
+# class UserLoginView(APIView):
+#     permission_classes = [AllowAny]
+
+#     def post(self, request):
+#         serializer = UserLoginSerializer(data=request.data)
+#         if serializer.is_valid():
+#             username = serializer.validated_data['username']
+#             password = serializer.validated_data['password']
+#             user = authenticate(username=username, password=password)
+
+#             if user:
+#                 if not user.is_active:
+#                     return Response({'error': 'Account is not activated. Please check your email.'},
+#                                     status=status.HTTP_401_UNAUTHORIZED)
+
+#                 token, _ = Token.objects.get_or_create(user=user)
+#                 login(request, user)
+#                 return Response({'token': token.key, 'user_id': user.id, 'username': user.username},
+#                                 status=status.HTTP_200_OK)
+
+#             return Response({'error': 'Invalid username or password.'}, status=status.HTTP_401_UNAUTHORIZED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 class UserLoginView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        serializer = UserLoginSerializer(data=request.data)
+        # Validate the serializer data
+        serializer = serializers.UserLoginSerializer(data=request.data)
         if serializer.is_valid():
             username = serializer.validated_data['username']
             password = serializer.validated_data['password']
+
+            # Authenticate the user
             user = authenticate(username=username, password=password)
 
+            # Check if the user exists
             if user:
+                # Check if the account is active
                 if not user.is_active:
-                    return Response({'error': 'Account is not activated. Please check your email.'},
-                                    status=status.HTTP_401_UNAUTHORIZED)
+                    return Response({
+                        'error': 'Account is not activated. Please check your email for activation.'
+                    }, status=status.HTTP_401_UNAUTHORIZED)
 
-                token, _ = Token.objects.get_or_create(user=user)
+                # Ensure token exists or create one
+                token, created = Token.objects.get_or_create(user=user)
+
+                # Check if the user has a corresponding patient record
+                try:
+                    patient = models.Patient.objects.get(user=user)
+                except models.Patient.DoesNotExist:
+                    return Response({
+                        'error': 'Patient record not found. Please contact support.'
+                    }, status=status.HTTP_404_NOT_FOUND)
+
+                # Log the user in
                 login(request, user)
-                return Response({'token': token.key, 'user_id': user.id, 'username': user.username},
-                                status=status.HTTP_200_OK)
 
-            return Response({'error': 'Invalid username or password.'}, status=status.HTTP_401_UNAUTHORIZED)
+                # Respond with the token and relevant user info
+                return Response({
+                    'token': token.key,
+                    'user_id': user.id,
+                    'patient_id': patient.id,
+                    'username': user.username
+                }, status=status.HTTP_200_OK)
+
+            # Invalid username or password
+            return Response({
+                'error': 'Invalid username or password.'
+            }, status=status.HTTP_401_UNAUTHORIZED)
+
+        # If serializer is not valid, return errors
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 ### Logout View
 class UserLogoutView(APIView):
