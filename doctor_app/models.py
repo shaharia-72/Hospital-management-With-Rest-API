@@ -28,31 +28,26 @@ class AvailableTime(models.Model):
 class Doctor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to="doctor_app/images/") 
-    descriptions = models.TextField(null=True)
-    designation = models.ForeignKey(Designation,on_delete=models.CASCADE)
+    descriptions = models.TextField(null=True, blank=True)
+    designation = models.ForeignKey(Designation, on_delete=models.CASCADE)
     specialization = models.ManyToManyField(Specialization)
     availableTime = models.ManyToManyField(AvailableTime)
     fee = models.DecimalField(max_digits=10, decimal_places=2)
     meet_link = models.CharField(max_length=100)
+    clinic_address = models.CharField(max_length=255, blank=True, null=True)  # New field
+    contact_info = models.CharField(max_length=50, blank=True, null=True)  # New field
+    bio = models.TextField(blank=True, null=True)  # New field
 
     def __str__(self):
         return f"Dr. {self.user.first_name} {self.user.last_name}"
-
-
-STAR_CHOICES = [
-    ('★','★'),
-    ('★★','★★'),
-    ('★★★','★★★'),
-    ('★★★★','★★★★'),
-    ('★★★★★','★★★★★'),
-]
 
 class Review(models.Model):
     reviewer = models.ForeignKey(Patient, on_delete=models.CASCADE)
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     body = models.TextField()
     create_time = models.DateTimeField(auto_now_add=True)
-    rating = models.CharField(choices=STAR_CHOICES,max_length=20)
+    rating = models.IntegerField(default=0)
 
     def __str__(self):
-        return f"Patient: {self.reviewer.user.first_name} ; Doctor: {self.doctor.user.first_name}"
+        return f"Review by {self.reviewer.user.first_name} for Dr. {self.doctor.user.first_name}"
+

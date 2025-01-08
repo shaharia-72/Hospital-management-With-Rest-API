@@ -1,14 +1,15 @@
 from django.contrib import admin
 from .models import Patient
-# Register your models here.
-class PatientAdmin(admin.ModelAdmin):
-    # list_display = ['user.first_name',]
-    list_display = ['first_name','last_name','phone_no', 'image']
 
-    def first_name(self,obj):
+class PatientAdmin(admin.ModelAdmin):
+    list_display = ['get_first_name', 'get_last_name', 'phone_no', 'image']
+
+    @admin.display(description="First Name")
+    def get_first_name(self, obj):
         return obj.user.first_name
-    
-    def last_name(self,obj):
+
+    @admin.display(description="Last Name")
+    def get_last_name(self, obj):
         return obj.user.last_name
 
-admin.site.register(Patient,PatientAdmin)
+admin.site.register(Patient, PatientAdmin)

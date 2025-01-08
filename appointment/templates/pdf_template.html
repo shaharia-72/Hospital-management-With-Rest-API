@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Appointment Confirmation</title>
+    <style>
+      body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f7fc;
+        margin: 0;
+        padding: 0;
+        color: #333;
+      }
+      
+      /* Main container styling */
+      .container {
+        max-width: 600px;
+        margin: 30px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      
+      h1 {
+        text-align: center;
+        color: #0078d7;
+        font-size: 28px;
+        margin-bottom: 20px;
+      }
+      
+      /* Section Titles */
+      .section-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #0078d7;
+      }
+      
+      .section-content {
+        font-size: 16px;
+        margin-bottom: 15px;
+      }
+      
+      .section-content strong {
+        font-weight: bold;
+        color: #0078d7;
+      }
+      
+      .footer {
+        margin-top: 20px;
+        font-size: 14px;
+        text-align: center;
+        color: #777;
+      }
+      
+      .footer a {
+        color: #0078d7;
+        text-decoration: none;
+      }
+      
+      /* Custom styling for the appointment details */
+      .appointment-details {
+        margin-top: 20px;
+        padding: 10px 0;
+        border-top: 2px solid #0078d7;
+        border-bottom: 2px solid #0078d7;
+      }
+      
+      .appointment-details p {
+        line-height: 1.6;
+      }
+      
+      .appointment-details .detail {
+        margin-bottom: 10px;
+      }
+      
+      .appointment-details .detail:last-child {
+        margin-bottom: 0;
+      }
+      
+      .btn {
+        display: inline-block;
+        padding: 12px 25px;
+        background-color: #0078d7;
+        color: #fff;
+        text-decoration: none;
+        font-weight: bold;
+        border-radius: 5px;
+        margin-top: 20px;
+        text-align: center;
+      }
+      
+      .btn:hover {
+        background-color: #005fa3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Appointment Confirmation</h1>
+      <p>Dear {{ patient_name }},</p>
+      <p>We are pleased to confirm that your appointment has been successfully booked. Below are your appointment details:</p>
+
+      <div class="appointment-details">
+        <div class="detail">
+          <span class="section-title">Doctor Name:</span>
+          <span class="section-content">{{ doctor_name }}</span>
+        </div>
+        <div class="detail">
+          <span class="section-title">Appointment Type:</span>
+          <span class="section-content">{{ appointment_type }}</span>
+        </div>
+        <div class="detail">
+          <span class="section-title">Status:</span>
+          <span class="section-content">{{ appointment_status }}</span>
+        </div>
+        <div class="detail">
+          <span class="section-title">Appointment Time:</span>
+          <span class="section-content">{{ appointment_time }}</span>
+        </div>
+        <div class="detail">
+          <span class="section-title">Symptoms:</span>
+          <span class="section-content">{{ symptoms }}</span>
+        </div>
+      </div>
+
+      <a href="{{ meet_link }}" class="btn" target="_blank">Join Your Appointment</a>
+
+      <div class="footer">
+        <p>Thank you for choosing our service!</p>
+        <p>
+          If you have any questions, please contact us at <a href="mailto:support@ourservice.com">support@ourservice.com</a>.
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

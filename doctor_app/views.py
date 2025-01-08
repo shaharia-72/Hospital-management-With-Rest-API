@@ -38,6 +38,18 @@ class DoctorView(viewsets.ModelViewSet):
     pagination_class = DoctorPaginationView
     search_fields = ['user__first_name', 'user__email', 'designation__name','specialization__name']
 
+class DoctorDetailView(viewsets.ModelViewSet):
+    queryset = models.Doctor.objects.all()
+    serializer_class = serializers.DoctorSerializer
+
+    def retrieve(self, request, pk=None):
+        doctor = self.get_object()
+        reviews = models.Review.objects.filter(doctor=doctor)
+        review_serializer = serializers.ReviewSerializer(reviews, many=True)
+        return Response({
+            "doctor": self.get_serializer(doctor).data,
+            "reviews": review_serializer.data,
+        })
 class DoctorReviewView(viewsets.ModelViewSet):
     queryset = models.Review.objects.all()
     serializer_class = serializers.DoctorReviewSerializer
